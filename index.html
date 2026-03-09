@@ -261,6 +261,71 @@
     text-align: center;
   }
 
+  /* ── ABOUT ── */
+  #about { background: var(--bg); overflow: hidden; }
+  #about-scroll {
+    flex: 1;
+    min-height: 0;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+    padding: 16px 16px 32px;
+  }
+  .about-section {
+    background: linear-gradient(135deg, #2563EB, #7C3AED);
+    border-radius: var(--radius);
+    padding: 24px 20px;
+    text-align: center;
+    margin-bottom: 16px;
+    color: white;
+  }
+  .about-section-icon { font-size: 2.2rem; margin-bottom: 10px; }
+  .about-section-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.15rem;
+    margin-bottom: 8px;
+    color: white;
+  }
+  .about-section-body {
+    font-size: 0.83rem;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.85);
+  }
+  .legal-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    margin-bottom: 10px;
+    box-shadow: var(--shadow);
+  }
+  .legal-card-title {
+    font-weight: 700;
+    font-size: 0.88rem;
+    color: var(--text);
+    margin-bottom: 7px;
+  }
+  .legal-card-body {
+    font-size: 0.8rem;
+    color: var(--text2);
+    line-height: 1.65;
+  }
+  .insta-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #E1306C;
+    font-weight: 600;
+    font-size: 0.88rem;
+    text-decoration: none;
+  }
+  .insta-link:hover { text-decoration: underline; }
+  .about-footer {
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--text2);
+    padding: 20px 0 8px;
+  }
+
   /* ── FILTER SCROLL ── */
   #filter { background: var(--bg); overflow: hidden; }
   #filter-scroll {
@@ -911,6 +976,61 @@
     <div class="saved-list" id="saved-list"></div>
   </div>
 
+  <!-- ABOUT -->
+  <div class="screen" id="about">
+    <div class="screen-header">
+      <div style="width:40px"></div>
+      <div class="screen-header-text" style="text-align:center">
+        <div class="screen-header-title">About 📋</div>
+        <div class="screen-header-sub">Legal & disclaimer</div>
+      </div>
+      <div style="width:40px"></div>
+    </div>
+    <div id="about-scroll">
+
+      <!-- App info -->
+      <div class="about-section">
+        <div class="about-section-icon">🍽️</div>
+        <div class="about-section-title">Where Should We Eat? – Dubai</div>
+        <div class="about-section-body">A fun, independent app to help you discover restaurants across Dubai. Built with love for anyone who's ever spent 20 minutes arguing about where to eat.</div>
+      </div>
+
+      <!-- Disclaimer -->
+      <div class="legal-card">
+        <div class="legal-card-title">⚠️ Disclaimer</div>
+        <div class="legal-card-body">This app is an independent, unofficial restaurant discovery tool. It is not affiliated with, endorsed by, or connected to any of the restaurants, brands, or businesses listed. If you are a restaurant owner and wish to be removed from this listing, please contact us via Instagram at @eatwhileyoutravel.</div>
+      </div>
+
+      <div class="legal-card">
+        <div class="legal-card-title">📍 Restaurant Information</div>
+        <div class="legal-card-body">All restaurant names, locations and details are publicly available information curated for convenience. We make no guarantee that information is current, accurate or complete. Restaurant hours, menus, prices and availability may change without notice. Always verify directly with the restaurant before visiting.</div>
+      </div>
+
+      <div class="legal-card">
+        <div class="legal-card-title">🔗 External Links</div>
+        <div class="legal-card-body">This app links to Google Maps for directions. We are not responsible for the content, accuracy or availability of any third-party websites or services.</div>
+      </div>
+
+      <div class="legal-card">
+        <div class="legal-card-title">©️ Copyright</div>
+        <div class="legal-card-body">The design, code and concept of this app are the property of its creator. Restaurant names and trademarks belong to their respective owners. This app does not claim ownership over any listed restaurant brand.</div>
+      </div>
+
+      <div class="legal-card">
+        <div class="legal-card-title">📬 Contact</div>
+        <div class="legal-card-body">Have a restaurant to suggest or something to report? We'd love to hear from you.<br><br>
+          <a href="https://instagram.com/eatwhileyoutravel" target="_blank" class="insta-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            @eatwhileyoutravel
+          </a>
+        </div>
+      </div>
+
+      <div class="about-footer">Made with ❤️ in Dubai · © 2026</div>
+
+    </div>
+  </div>
+
   <!-- NAV -->
   <nav class="nav-bar">
     <button class="nav-item active" id="nav-home" onclick="navTo('home')">
@@ -930,6 +1050,12 @@
         <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
       </svg>
       <span>Saved</span>
+    </button>
+    <button class="nav-item" id="nav-about" onclick="navTo('about')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <span>About</span>
     </button>
   </nav>
 </div>
@@ -1076,6 +1202,7 @@ function goTo(screen){
   state.currentScreen=screen;
   updateNavBar(screen);
   if(screen==='saved') renderSaved();
+  if(screen==='about'){ var as=document.getElementById('about-scroll'); if(as) as.scrollTop=0; }
   if(screen==='filter') updateMatchCount();
   if(screen==='result') { var rs=document.getElementById('result-scroll'); if(rs) rs.scrollTop=0; }
 }
@@ -1083,7 +1210,7 @@ function navTo(s){goTo(s);}
 
 function updateNavBar(screen){
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  const map={home:'nav-home',filter:'nav-filter',result:'nav-filter',saved:'nav-saved'};
+  const map={home:'nav-home',filter:'nav-filter',result:'nav-filter',saved:'nav-saved',about:'nav-about'};
   if(map[screen]) document.getElementById(map[screen]).classList.add('active');
 }
 
