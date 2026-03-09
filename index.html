@@ -261,6 +261,113 @@
     text-align: center;
   }
 
+  /* ── FILTER SCROLL ── */
+  #filter { background: var(--bg); overflow: hidden; }
+  #filter-scroll {
+    flex: 1;
+    min-height: 0;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Area search */
+  .area-search-wrap {
+    display: flex;
+    align-items: center;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 0 12px;
+    gap: 8px;
+    transition: border-color 0.2s;
+  }
+  .area-search-wrap:focus-within {
+    border-color: var(--blue);
+    background: var(--white);
+  }
+  .area-search-icon { font-size: 0.9rem; flex-shrink: 0; }
+  .area-search-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 11px 0;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    color: var(--text);
+    outline: none;
+  }
+  .area-search-input::placeholder { color: var(--text2); }
+  .area-clear {
+    background: none;
+    border: none;
+    color: var(--text2);
+    cursor: pointer;
+    font-size: 0.85rem;
+    padding: 4px;
+    flex-shrink: 0;
+  }
+
+  .area-suggestions {
+    margin-top: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+  }
+  .area-suggestion-chip {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    color: var(--text);
+    padding: 6px 13px;
+    border-radius: 100px;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .area-suggestion-chip:active { transform: scale(0.93); }
+  .area-suggestion-chip.selected {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: #fff;
+    font-weight: 500;
+  }
+
+  .area-selected-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    background: var(--blue);
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 100px;
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+  .area-selected-pill button {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.8);
+    cursor: pointer;
+    font-size: 0.8rem;
+    padding: 0;
+    line-height: 1;
+  }
+
+  /* Cuisine groups */
+  .cuisine-group { margin-bottom: 14px; }
+  .cuisine-group:last-child { margin-bottom: 0; }
+  .cuisine-group-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text2);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .cuisine-group-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+
   /* ── RESULT ── */
   #result {
     background: var(--bg);
@@ -637,27 +744,51 @@
       <button class="icon-btn" onclick="goTo('home')">←</button>
       <div class="screen-header-text">
         <div class="screen-header-title">What's the vibe?</div>
-        <div class="screen-header-sub">Leave any blank to include all</div>
+        <div class="screen-header-sub">Search area · pick cuisine · set budget</div>
       </div>
     </div>
-    <div class="filter-body">
-      <div class="filter-card">
-        <div class="filter-card-label">📍 Area</div>
-        <div class="filter-chips" id="area-chips"></div>
+
+    <div id="filter-scroll">
+
+      <!-- Area search -->
+      <div class="filter-body" style="padding-bottom:0">
+        <div class="filter-card">
+          <div class="filter-card-label">📍 Area</div>
+          <div class="area-search-wrap">
+            <span class="area-search-icon">🔍</span>
+            <input type="text" id="area-search" class="area-search-input"
+              placeholder="Search area e.g. Karama, JBR..."
+              oninput="onAreaSearch(this.value)"
+              autocomplete="off" />
+            <button class="area-clear" id="area-clear" onclick="clearArea()" style="display:none">✕</button>
+          </div>
+          <div class="area-suggestions" id="area-suggestions"></div>
+          <div class="area-selected-pill" id="area-selected-pill" style="display:none">
+            <span id="area-selected-text"></span>
+            <button onclick="clearArea()">✕</button>
+          </div>
+        </div>
+
+        <!-- Cuisine grouped -->
+        <div class="filter-card">
+          <div class="filter-card-label">🍴 Cuisine</div>
+          <div id="cuisine-groups"></div>
+        </div>
+
+        <!-- Budget -->
+        <div class="filter-card">
+          <div class="filter-card-label">💸 Budget</div>
+          <div class="filter-chips" id="budget-chips"></div>
+        </div>
       </div>
-      <div class="filter-card">
-        <div class="filter-card-label">🍴 Cuisine</div>
-        <div class="filter-chips" id="cuisine-chips"></div>
+
+      <div style="height:12px"></div>
+      <div class="spin-footer">
+        <div class="match-pill" id="match-count-pill">94 restaurants match</div>
+        <button class="btn-primary" onclick="spinIt()">🎲 Spin for a Restaurant</button>
       </div>
-      <div class="filter-card">
-        <div class="filter-card-label">💸 Budget</div>
-        <div class="filter-chips" id="budget-chips"></div>
-      </div>
-    </div>
-    <div style="flex:1"></div>
-    <div class="spin-footer">
-      <div class="match-pill" id="match-count-pill">36 restaurants match</div>
-      <button class="btn-primary" onclick="spinIt()">🎲 Spin for a Restaurant</button>
+      <div style="height:20px"></div>
+
     </div>
   </div>
 
@@ -886,6 +1017,48 @@ const restaurants = [
   {id:52,name:"Al Ustad Special Kebab",area:"Bur Dubai",cuisine:"Iranian",budget:"Mid",emoji:"🍢",rating:"4.5",mapsUrl:"https://maps.google.com/?q=Al+Ustad+Special+Kebab+Dubai",desc:"Historic Iranian kebab institution in Bur Dubai. Saffron rice, charcoal-grilled koobideh — legendary.",vibe:"Historic institution, cash only"},
   {id:53,name:"Hot Palayok",area:"Deira",cuisine:"Filipino",budget:"Cheap",emoji:"🍲",rating:"4.3",mapsUrl:"https://maps.google.com/?q=Hot+Palayok+Dubai",desc:"Authentic Filipino comfort food — sinigang, adobo and lechon kawali that'll make you feel at home.",vibe:"Filipino home cooking away from home"},
   {id:54,name:"Salt & Chilli",area:"Karama",cuisine:"Asian",budget:"Cheap",emoji:"🌶️",rating:"4.2",mapsUrl:"https://maps.google.com/?q=Salt+and+Chilli+Karama+Dubai",desc:"Spicy Indo-Chinese street food done cheap and fast. The chilli chicken is addictive and dangerously good.",vibe:"Spicy, cheap, hits the spot"},
+
+  // ── NEW BATCH ──
+  {id:55,name:"Al Abdallah Cafeteria",area:"Satwa",cuisine:"Lebanese",budget:"Cheap",emoji:"🥙",rating:"4.3",mapsUrl:"https://maps.google.com/?q=Al+Abdallah+Cafeteria+Dubai",desc:"Classic shawarma cafeteria in the heart of Satwa. Cheap, fast, and always fresh.",vibe:"Old school Satwa classic"},
+  {id:56,name:"Al Hara Cafeteria",area:"Karama",cuisine:"Arabic",budget:"Cheap",emoji:"🥙",rating:"4.1",mapsUrl:"https://maps.google.com/?q=Al+Hara+Cafeteria+Dubai",desc:"Quick shawarma and sandwiches done the traditional way. A Karama go-to for a quick bite.",vibe:"Quick, cheap, no fuss"},
+  {id:57,name:"Des Pardes",area:"Karama",cuisine:"Pakistani",budget:"Cheap",emoji:"🫕",rating:"4.3",mapsUrl:"https://maps.google.com/?q=Des+Pardes+Karama+Dubai",desc:"Simple Pakistani comfort food that hits every time. Daal, karahi and roti at honest prices.",vibe:"Home cooking away from home"},
+  {id:58,name:"Pak Ghazi",area:"International City",cuisine:"Pakistani",budget:"Cheap",emoji:"🍖",rating:"4.4",mapsUrl:"https://maps.google.com/?q=Pak+Ghazi+Dubai",desc:"Authentic Pakistani BBQ beloved in International City. The seekh kebabs and tikka are the real deal.",vibe:"Authentic BBQ, deep in the city"},
+  {id:59,name:"Bait Al Mandi",area:"Al Barsha",cuisine:"Yemeni",budget:"Cheap",emoji:"🍚",rating:"4.5",mapsUrl:"https://maps.google.com/?q=Bait+Al+Mandi+Dubai",desc:"Traditional slow-cooked mandi rice with tender lamb or chicken. A proper Yemeni experience.",vibe:"Communal, flavourful, filling"},
+  {id:60,name:"Najd Palace",area:"Al Nahda",cuisine:"Yemeni",budget:"Cheap",emoji:"🍗",rating:"4.4",mapsUrl:"https://maps.google.com/?q=Najd+Palace+Dubai",desc:"Classic Yemeni rice dishes served generous and aromatic. Locals know this place well.",vibe:"Hidden gem, worth the drive"},
+  {id:61,name:"Kabab Al Afghani",area:"Al Nahda",cuisine:"Afghan",budget:"Cheap",emoji:"🍢",rating:"4.5",mapsUrl:"https://maps.google.com/?q=Kabab+Al+Afghani+Dubai",desc:"Authentic Afghan kebabs grilled over charcoal. Simple, smoky and absolutely worth seeking out.",vibe:"No frills, all flavour"},
+  {id:62,name:"Afghan Khorasan",area:"Al Barsha",cuisine:"Afghan",budget:"Cheap",emoji:"🔥",rating:"4.4",mapsUrl:"https://maps.google.com/?q=Afghan+Khorasan+Dubai",desc:"Popular Afghan grill spot known for its charcoal-grilled meats and fragrant rice dishes.",vibe:"Smoky, generous, satisfying"},
+  {id:63,name:"Calicut Paragon",area:"Karama",cuisine:"South Indian",budget:"Cheap",emoji:"🍛",rating:"4.5",mapsUrl:"https://maps.google.com/?q=Calicut+Paragon+Dubai",desc:"Famous Kerala cuisine with incredible fish curries, appam and biriyani straight from the coast.",vibe:"Kerala nostalgia on a plate"},
+  {id:64,name:"Saravana Bhavan",area:"Karama",cuisine:"South Indian",budget:"Cheap",emoji:"🫓",rating:"4.4",mapsUrl:"https://maps.google.com/?q=Saravana+Bhavan+Dubai",desc:"Iconic global vegetarian chain famous for its dosas and South Indian breakfast spreads.",vibe:"Vegetarian institution"},
+  {id:65,name:"Sangeetha Veg",area:"Karama",cuisine:"South Indian",budget:"Cheap",emoji:"🥘",rating:"4.3",mapsUrl:"https://maps.google.com/?q=Sangeetha+Veg+Dubai",desc:"Affordable vegetarian South Indian meals done with care. The thali is a steal.",vibe:"Pure veg, pure comfort"},
+  {id:66,name:"A2B Veg Restaurant",area:"Karama",cuisine:"South Indian",budget:"Cheap",emoji:"🍜",rating:"4.2",mapsUrl:"https://maps.google.com/?q=A2B+Veg+Dubai",desc:"South Indian comfort food classics — idli, vada, dosa and filter coffee done right.",vibe:"Breakfast to dinner sorted"},
+  {id:67,name:"Calicut Notebook",area:"Karama",cuisine:"Indian",budget:"Cheap",emoji:"🐟",rating:"4.4",mapsUrl:"https://maps.google.com/?q=Calicut+Notebook+Dubai",desc:"Kerala seafood dishes bursting with spice and freshness. The fish curry is absolutely legendary.",vibe:"Seafood lovers paradise"},
+  {id:68,name:"Bu Qtair",area:"Jumeirah",cuisine:"Seafood",budget:"Cheap",emoji:"🦐",rating:"4.6",mapsUrl:"https://maps.google.com/?q=Bu+Qtair+Dubai",desc:"Legendary beachside seafood shack in Jumeirah. Fried fish and prawns eaten on plastic chairs. Iconic.",vibe:"Dubai bucket list, no question"},
+  {id:69,name:"Sultan Saray",area:"Al Barsha",cuisine:"Turkish",budget:"Cheap",emoji:"🥩",rating:"4.2",mapsUrl:"https://maps.google.com/?q=Sultan+Saray+Dubai",desc:"Affordable Turkish grills with proper pide, kebabs and a warm neighbourhood atmosphere.",vibe:"Casual Turkish comfort"},
+  {id:70,name:"Lahori Chatkhara",area:"International City",cuisine:"Pakistani",budget:"Cheap",emoji:"🌶️",rating:"4.4",mapsUrl:"https://maps.google.com/?q=Lahori+Chatkhara+Dubai",desc:"Street style Pakistani food with bold Lahori flavours. The charga and nihari are standouts.",vibe:"Spicy, bold, street energy"},
+  {id:71,name:"Pak Punjab Restaurant",area:"Deira",cuisine:"Pakistani",budget:"Cheap",emoji:"🫕",rating:"4.2",mapsUrl:"https://maps.google.com/?q=Pak+Punjab+Restaurant+Dubai",desc:"Homestyle Pakistani meals that feel like someone's mum cooked them. Honest, warm and filling.",vibe:"Homestyle, no pretence"},
+  {id:72,name:"Calicut Foodies",area:"Al Qusais",cuisine:"Indian",budget:"Cheap",emoji:"🍛",rating:"4.3",mapsUrl:"https://maps.google.com/?q=Calicut+Foodies+Dubai",desc:"South Indian comfort dishes with a focus on Kerala flavours. Great for a wholesome weekday meal.",vibe:"Neighbourhood gem"},
+  {id:73,name:"Eat and Drink Restaurant",area:"Satwa",cuisine:"Arabic",budget:"Cheap",emoji:"🌙",rating:"4.1",mapsUrl:"https://maps.google.com/?q=Eat+and+Drink+Restaurant+Dubai",desc:"Classic late night cafeteria in Satwa. The place to be after midnight for shawarma and fresh juice.",vibe:"Late night Satwa ritual"},
+  {id:74,name:"Shater Abbas",area:"Deira",cuisine:"Iranian",budget:"Cheap",emoji:"🍢",rating:"4.4",mapsUrl:"https://maps.google.com/?q=Shater+Abbas+Dubai",desc:"Persian kebab classic in Deira. Saffron-marinated koobideh and juicy barg that melt in your mouth.",vibe:"Persian classic, Deira institution"},
+  {id:75,name:"Barbar",area:"Jumeirah",cuisine:"Lebanese",budget:"Mid",emoji:"🥙",rating:"4.4",mapsUrl:"https://maps.google.com/?q=Barbar+Dubai",desc:"Famous Lebanese street food chain done with quality. The manakish and shawarma are genuinely excellent.",vibe:"Lebanese street food elevated"},
+  {id:76,name:"MyGovinda's",area:"Karama",cuisine:"Indian Vegetarian",budget:"Mid",emoji:"🌸",rating:"4.3",mapsUrl:"https://maps.google.com/?q=MyGovindas+Dubai",desc:"Pure vegetarian Indian food with a spiritual touch. Creative dishes, zero meat, maximum flavour.",vibe:"Pure veg, pure soul"},
+  {id:77,name:"Al Hallab",area:"Dubai Mall",cuisine:"Lebanese",budget:"Mid",emoji:"🍮",rating:"4.3",mapsUrl:"https://maps.google.com/?q=Al+Hallab+Dubai",desc:"Lebanese desserts and grills from a Beirut institution. The knafeh and baklava are non-negotiable.",vibe:"Lebanese sweet tooth sorted"},
+  {id:78,name:"Asha's",area:"City Walk",cuisine:"Indian",budget:"Mid",emoji:"🎵",rating:"4.3",mapsUrl:"https://maps.google.com/?q=Ashas+Dubai",desc:"Celebrity chef Asha Bhosle's Indian restaurant with bold flavours and a vibrant atmosphere.",vibe:"Bollywood energy, great food"},
+  {id:79,name:"The Sum of Us",area:"Trade Centre",cuisine:"Cafe",budget:"Mid",emoji:"☕",rating:"4.5",mapsUrl:"https://maps.google.com/?q=The+Sum+of+Us+Dubai",desc:"One of Dubai's most beloved brunch cafes. Incredible sourdough, great coffee and warm vibes.",vibe:"The brunch benchmark"},
+  {id:80,name:"Wild & The Moon",area:"Alserkal Avenue",cuisine:"Healthy",budget:"Mid",emoji:"🌿",rating:"4.3",mapsUrl:"https://maps.google.com/?q=Wild+and+The+Moon+Dubai",desc:"Organic plant-based food done beautifully. Cold-pressed juices, wholesome bowls and guilt-free indulgence.",vibe:"Clean eating, artsy crowd"},
+  {id:81,name:"La Cantine du Faubourg",area:"DIFC",cuisine:"French",budget:"Mid",emoji:"🥂",rating:"4.2",mapsUrl:"https://maps.google.com/?q=La+Cantine+du+Faubourg+Dubai",desc:"French chic dining in DIFC with a lively social scene, great cocktails and solid bistro food.",vibe:"See and be seen"},
+  {id:82,name:"La Serre",area:"Downtown",cuisine:"French",budget:"Mid",emoji:"🥐",rating:"4.3",mapsUrl:"https://maps.google.com/?q=La+Serre+Dubai",desc:"French bakery and bistro with stunning Downtown views. The croissants and pasta are both exceptional.",vibe:"Parisian morning in Dubai"},
+  {id:83,name:"Bussola",area:"Dubai Marina",cuisine:"Italian",budget:"Mid",emoji:"⚓",rating:"4.3",mapsUrl:"https://maps.google.com/?q=Bussola+Dubai",desc:"Italian dining with gorgeous marina views, wood-fired pizza and handmade pasta done with care.",vibe:"Marina views, Italian soul"},
+  {id:84,name:"Fi'lia",area:"Business Bay",cuisine:"Italian",budget:"Mid",emoji:"🌿",rating:"4.4",mapsUrl:"https://maps.google.com/?q=Filia+Dubai",desc:"Modern Italian cuisine by a celebrated chef. Beautiful pastas, wood-fired dishes and effortless elegance.",vibe:"Italian done modern and right"},
+  {id:85,name:"Junoon",area:"DIFC",cuisine:"Indian",budget:"Treat Yourself",emoji:"🪷",rating:"4.5",mapsUrl:"https://maps.google.com/?q=Junoon+Dubai",desc:"Luxury Indian dining with a theatrical kitchen and refined takes on classic subcontinent dishes.",vibe:"Fine Indian, unforgettable"},
+  {id:86,name:"Hakkasan",area:"Atlantis",cuisine:"Chinese",budget:"Treat Yourself",emoji:"🏮",rating:"4.5",mapsUrl:"https://maps.google.com/?q=Hakkasan+Dubai",desc:"Michelin-starred Chinese cuisine in a dramatic underground setting. Dim sum and Peking duck perfection.",vibe:"Dark, glamorous, world-class"},
+  {id:87,name:"Ossiano",area:"Atlantis",cuisine:"Seafood",budget:"Treat Yourself",emoji:"🐠",rating:"4.7",mapsUrl:"https://maps.google.com/?q=Ossiano+Dubai",desc:"Underwater fine dining surrounded by an aquarium. One of the most unique dining experiences on Earth.",vibe:"Once in a lifetime dinner"},
+  {id:88,name:"Al Muntaha",area:"Burj Al Arab",cuisine:"French",budget:"Treat Yourself",emoji:"👑",rating:"4.6",mapsUrl:"https://maps.google.com/?q=Al+Muntaha+Dubai",desc:"Luxury French dining at the top of the Burj Al Arab with panoramic sea views. Pure Dubai excess.",vibe:"The ultimate flex dinner"},
+  {id:89,name:"CÉ LA VI",area:"Downtown",cuisine:"Asian Fusion",budget:"Treat Yourself",emoji:"🌃",rating:"4.4",mapsUrl:"https://maps.google.com/?q=Ce+La+Vi+Dubai",desc:"Skyline dining with Burj Khalifa views, creative Asian fusion plates and a rooftop bar that dazzles.",vibe:"Skyline views, big energy"},
+  {id:90,name:"Nobu",area:"Atlantis",cuisine:"Japanese",budget:"Treat Yourself",emoji:"🍣",rating:"4.6",mapsUrl:"https://maps.google.com/?q=Nobu+Dubai",desc:"The iconic Nobu brand lands at Atlantis. Black cod miso and new-style sashimi as legendary as ever.",vibe:"Global icon, Dubai edition"},
+  {id:91,name:"ZETA Seventy Seven",area:"Dubai Marina",cuisine:"Asian",budget:"Treat Yourself",emoji:"🌆",rating:"4.3",mapsUrl:"https://maps.google.com/?q=Zeta+Seventy+Seven+Dubai",desc:"Sky-high dining with sweeping Marina views, creative Asian plates and a rooftop atmosphere that thrills.",vibe:"Sky-high vibes, great views"},
+  {id:92,name:"Ristorante Loren",area:"Palm Jumeirah",cuisine:"Italian",budget:"Treat Yourself",emoji:"🌴",rating:"4.5",mapsUrl:"https://maps.google.com/?q=Loren+Dubai",desc:"Luxury Italian dining on the Palm with impeccable pasta, fresh seafood and a dreamy setting.",vibe:"Palm Jumeirah Italian romance"},
+  {id:93,name:"Roka",area:"Business Bay",cuisine:"Japanese",budget:"Treat Yourself",emoji:"🔥",rating:"4.5",mapsUrl:"https://maps.google.com/?q=Roka+Dubai",desc:"Contemporary Japanese robata grill with bold flavours, stunning presentation and a buzzing atmosphere.",vibe:"Japanese grill done brilliantly"},
+  {id:94,name:"STAY by Yannick Alléno",area:"Palm Jumeirah",cuisine:"French",budget:"Treat Yourself",emoji:"⭐",rating:"4.6",mapsUrl:"https://maps.google.com/?q=Stay+by+Yannick+Alleno+Dubai",desc:"Michelin-star French cuisine by world-renowned chef Yannick Alléno. Flawless, refined and memorable.",vibe:"Michelin magic on the Palm"},
 ];
 
 const state = {
@@ -914,31 +1087,116 @@ function updateNavBar(screen){
   if(map[screen]) document.getElementById(map[screen]).classList.add('active');
 }
 
-// Chips
-const areas=['Satwa','Karama','JLT','Al Barsha','JBR','Jumeirah','DIFC','Downtown','Deira','Bur Dubai','Oud Metha','Sheikh Zayed Road','Al Quoz','Alserkal Avenue','Meena Bazaar','Business Bay','Souk Madinat','Dar Wasl','Al Manara','Boxpark','Festival City','Mall of Emirates','Dubai Mall','Al Fahidi','Kite Beach'];
-const cuisines=['Arabic','Pakistani','Indian','Burgers','Korean','Japanese','Chinese','Asian','Italian','Pizza','Cafe','Emirati','Lebanese','Turkish','Greek','French','Iranian','Filipino','American'];
+// ── Filter data ──
+const allAreas=['Satwa','Karama','JLT','Al Barsha','JBR','Jumeirah','DIFC','Downtown','Deira','Bur Dubai','Oud Metha','Sheikh Zayed Road','Al Quoz','Alserkal Avenue','Meena Bazaar','Business Bay','Souk Madinat','Dar Wasl','Al Manara','Boxpark','Festival City','Mall of Emirates','Dubai Mall','Al Fahidi','Kite Beach','International City','Al Nahda','Al Qusais','City Walk','Trade Centre','Atlantis','Burj Al Arab','Palm Jumeirah','Dubai Marina'];
+
+const cuisineGroups = [
+  { label: '🥙 Middle Eastern', items: ['Arabic','Lebanese','Emirati','Yemeni','Iranian','Turkish'] },
+  { label: '🍛 South Asian',     items: ['Indian','Pakistani','South Indian','Indian Vegetarian','Afghan'] },
+  { label: '🍜 East Asian',      items: ['Japanese','Korean','Chinese','Asian','Asian Fusion','Taiwanese'] },
+  { label: '🍕 Western',         items: ['Italian','French','Pizza','Burgers','American','Greek'] },
+  { label: '☕ Cafes & More',    items: ['Cafe','Healthy','Seafood','Filipino'] },
+];
+
 const budgets=['Cheap','Mid','Treat Yourself'];
 
 function buildChips(){
-  buildGroup('area-chips',areas,'area');
-  buildGroup('cuisine-chips',cuisines,'cuisine');
-  buildGroup('budget-chips',budgets,'budget');
+  buildBudgetChips();
+  buildCuisineGroups();
 }
-function buildGroup(id,items,key){
-  const el=document.getElementById(id);
+
+function buildBudgetChips(){
+  const el=document.getElementById('budget-chips');
   el.innerHTML='';
-  items.forEach(item=>{
+  budgets.forEach(item=>{
     const btn=document.createElement('button');
     btn.className='chip';
     btn.textContent=item;
     btn.onclick=()=>{
-      document.querySelectorAll(`#${id} .chip`).forEach(c=>c.classList.remove('selected'));
-      if(state.filters[key]===item){state.filters[key]=null;}
-      else{state.filters[key]=item;btn.classList.add('selected');}
+      document.querySelectorAll('#budget-chips .chip').forEach(c=>c.classList.remove('selected'));
+      if(state.filters.budget===item){state.filters.budget=null;}
+      else{state.filters.budget=item;btn.classList.add('selected');}
       updateMatchCount();
     };
     el.appendChild(btn);
   });
+}
+
+function buildCuisineGroups(){
+  const el=document.getElementById('cuisine-groups');
+  el.innerHTML='';
+  cuisineGroups.forEach(group=>{
+    const groupEl=document.createElement('div');
+    groupEl.className='cuisine-group';
+
+    const labelEl=document.createElement('div');
+    labelEl.className='cuisine-group-label';
+    labelEl.textContent=group.label;
+    groupEl.appendChild(labelEl);
+
+    const chipsEl=document.createElement('div');
+    chipsEl.className='cuisine-group-chips';
+
+    group.items.forEach(item=>{
+      // only show if at least 1 restaurant has this cuisine
+      const hasAny=restaurants.some(r=>r.cuisine===item);
+      if(!hasAny) return;
+      const btn=document.createElement('button');
+      btn.className='chip';
+      btn.dataset.cuisine=item;
+      btn.textContent=item;
+      btn.onclick=()=>{
+        document.querySelectorAll('#cuisine-groups .chip').forEach(c=>c.classList.remove('selected'));
+        if(state.filters.cuisine===item){state.filters.cuisine=null;}
+        else{state.filters.cuisine=item;btn.classList.add('selected');}
+        updateMatchCount();
+      };
+      chipsEl.appendChild(btn);
+    });
+    groupEl.appendChild(chipsEl);
+    el.appendChild(groupEl);
+  });
+}
+
+// Area search
+function onAreaSearch(val){
+  const clear=document.getElementById('area-clear');
+  const sugEl=document.getElementById('area-suggestions');
+  clear.style.display=val?'block':'none';
+
+  if(!val.trim()){
+    sugEl.innerHTML='';
+    return;
+  }
+  const matches=allAreas.filter(a=>a.toLowerCase().includes(val.toLowerCase()));
+  sugEl.innerHTML='';
+  matches.slice(0,8).forEach(area=>{
+    const btn=document.createElement('button');
+    btn.className='area-suggestion-chip'+(state.filters.area===area?' selected':'');
+    btn.textContent=area;
+    btn.onclick=()=>selectArea(area);
+    sugEl.appendChild(btn);
+  });
+}
+
+function selectArea(area){
+  state.filters.area=area;
+  document.getElementById('area-search').value='';
+  document.getElementById('area-suggestions').innerHTML='';
+  document.getElementById('area-clear').style.display='none';
+  const pill=document.getElementById('area-selected-pill');
+  document.getElementById('area-selected-text').textContent='📍 '+area;
+  pill.style.display='inline-flex';
+  updateMatchCount();
+}
+
+function clearArea(){
+  state.filters.area=null;
+  document.getElementById('area-search').value='';
+  document.getElementById('area-suggestions').innerHTML='';
+  document.getElementById('area-clear').style.display='none';
+  document.getElementById('area-selected-pill').style.display='none';
+  updateMatchCount();
 }
 
 function getMatches(){
@@ -1110,6 +1368,24 @@ function showToast(msg){
 
 buildChips();
 updateMatchCount();
+
+function syncFilterUI(){
+  // Re-sync cuisine chips selected state
+  document.querySelectorAll('#cuisine-groups .chip').forEach(btn=>{
+    btn.classList.toggle('selected', btn.dataset.cuisine===state.filters.cuisine);
+  });
+  // Re-sync budget chips
+  document.querySelectorAll('#budget-chips .chip').forEach(btn=>{
+    btn.classList.toggle('selected', btn.textContent===state.filters.budget);
+  });
+  // Re-sync area pill
+  if(state.filters.area){
+    document.getElementById('area-selected-text').textContent='📍 '+state.filters.area;
+    document.getElementById('area-selected-pill').style.display='inline-flex';
+  } else {
+    document.getElementById('area-selected-pill').style.display='none';
+  }
+}
 </script>
 </body>
 </html>
